@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enneagram Typing Tool</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000000;
+      color: #eee;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.2em;
+      overflow: hidden;
+    }
+
+    #main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .page {
+      display: none;
+      flex-direction: column;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    form input, form textarea, form button {
+      width: 100%;
+      margin-bottom: 1em;
+      padding: 0.5em;
+      font-size: 1em;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    button {
+      background: #444;
+      border: none;
+      padding: 0.75em 1.5em;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+      width: 100%;
+    }
+
+    h1, p {
+      text-align: center;
+    }
+
+    .paypal-container {
+      margin: 1em 0;
+    }
+  </style>
+
+  <!-- ✅ Load PayPal SDK -->
+  <script 
+    src="https://www.paypal.com/sdk/js?client-id=BAAJJ80CqGT3b65mquKpkXN5D6QDiEzBuFYAo01cGbU8jegpSf-uxaA0rGsozub3df2-HjosUBLIJLSf7M&components=hosted-buttons&enable-funding=venmo&currency=USD">
+  </script>
+</head>
+<body>
+
+<div id="main-container">
+  <div class="container">
+    <!-- Page 1: Typing Form -->
+    <section class="page active" id="page-1">
+      <h1>Typing Request</h1>
+      <form id="typing-form">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" required>
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" required>
+
+        <button type="submit">Continue to Payment</button>
+      </form>
+    </section>
+
+    <!-- Page 2: PayPal Hosted Button -->
+    <section class="page" id="page-2">
+      <h1>Complete Your Payment</h1>
+      <p>Use the button below to pay with PayPal:</p>
+      
+      <div id="paypal-container-8K53V3MR3B4VG" class="paypal-container"></div>
+
+      <button id="continue-after-payment">I Have Paid</button>
+    </section>
+
+    <!-- Page 3: Booking -->
+    <section class="page" id="page-3">
+      <h1>Booking Link</h1>
+      <p>Thank you for your payment! Click below to schedule your session:</p>
+      <a href="https://calendly.com/hiddenenneagram" target="_blank" style="text-align:center;display:block;background:#0070ba;color:white;padding:0.75em;border-radius:4px;text-decoration:none;">
+        Book Now
+      </a>
+      <br><br>
+      <button id="continue-after-booking">Continue</button>
+    </section>
+
+    <!-- Page 4: Thank You -->
+    <section class="page" id="page-4">
+      <h1>Thank You!</h1>
+      <p>Your request has been received. We will contact you at <strong>hiddenenneagram@gmail.com</strong>.</p>
+    </section>
+  </div>
+</div>
+
+<!-- ✅ Render the hosted PayPal button -->
+<script>
+  const pages = document.querySelectorAll('.page');
+
+  function showPage(index) {
+    pages.forEach((p, i) => p.classList.toggle('active', i === index));
+  }
+
+  document.getElementById('typing-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    showPage(1); // Show payment page
+  });
+
+  document.getElementById('continue-after-payment').addEventListener('click', function() {
+    showPage(2); // Show booking page
+  });
+
+  document.getElementById('continue-after-booking').addEventListener('click', function() {
+    showPage(3); // Show thank you page
+  });
+
+  // ✅ Render PayPal Hosted Button
+  paypal.HostedButtons({
+    hostedButtonId: "8K53V3MR3B4VG",
+  }).render("#paypal-container-8K53V3MR3B4VG");
+</script>
+
+</body>
+</html>
