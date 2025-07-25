@@ -65,13 +65,10 @@
     a button {
       display: inline-block;
       width: 100%;
+      text-decoration: none;
     }
 
-    h1 {
-      text-align: center;
-    }
-
-    p {
+    h1, p {
       text-align: center;
     }
   </style>
@@ -97,7 +94,12 @@
     <!-- Page 2: PayPal -->
     <section class="page" id="page-2">
       <h1>Complete Your Payment</h1>
-      <div id="paypal-button-container"></div>
+      <p>Click the button below to open PayPal in a new tab.</p>
+      <a href="https://www.paypal.com/paypalme/yourusername/10" target="_blank">
+        <button>Pay $10 with PayPal</button>
+      </a>
+      <br><br>
+      <button id="continue-after-payment">I Have Paid</button>
     </section>
 
     <!-- Page 3: Booking -->
@@ -119,7 +121,6 @@
   </div>
 </div>
 
-<script src="https://www.paypal.com/sdk/js?client-id=BAAJJ80CqGT3b65mquKpkXN5D6QDiEzBuFYAo01cGbU8jegpSf-uxaA0rGsozub3df2-HjosUBLIJLSf7M&components=buttons&enable-funding=venmo&currency=USD"></script>
 <script>
   const pages = document.querySelectorAll('.page');
 
@@ -129,24 +130,15 @@
 
   document.getElementById('typing-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    showPage(1); // Move to PayPal
+    showPage(1); // Show payment page
   });
 
-  paypal.Buttons({
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{ amount: { value: '10.00' } }]
-      });
-    },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        showPage(2); // Move to Booking
-      });
-    }
-  }).render('#paypal-button-container');
+  document.getElementById('continue-after-payment').addEventListener('click', function() {
+    showPage(2); // Show booking page
+  });
 
   document.getElementById('continue-after-booking').addEventListener('click', function() {
-    showPage(3); // Thank You page
+    showPage(3); // Show thank you
   });
 </script>
 
