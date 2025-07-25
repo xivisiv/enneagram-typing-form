@@ -15,7 +15,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .container {
@@ -36,7 +36,7 @@
       margin-top: 1em;
     }
 
-    input, select, button, textarea {
+    input, select, textarea, button {
       width: 100%;
       padding: 0.75em;
       margin-top: 0.5em;
@@ -54,7 +54,7 @@
     }
 
     #paypal-container {
-      margin-top: 1em;
+      margin-top: 2em;
       text-align: center;
     }
 
@@ -89,7 +89,8 @@
 
 <div class="container">
   <h1>Enneagram Session Request</h1>
-  <form id="session-form" action="https://formspree.io/f/xovlddjn" method="POST">
+
+  <form id="session-form" action="https://formspree.io/f/xovlddjn" method="POST" onsubmit="showPaymentOptions(); return false;">
     <label for="name">Your Name</label>
     <input type="text" name="name" id="name" required />
 
@@ -114,7 +115,7 @@
     <div id="paypal-button-consultation" class="hidden"></div>
   </div>
 
-  <a href="https://calendar.google.com/calendar/u/2?cid=ZWExMTA2MDRmNTcwZTkyNGEzMDM3YzgyNGE3NWJhYjNhNDcwMGM1Y2FkNzVkYzE0NTYzZDMyZWQwNWJiYTdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t" 
+  <a href="https://calendar.google.com/calendar/u/2?cid=ZWExMTA2MDRmNTcwZTkyNGEzMDM3YzgyNGE3NWJhYjNhNDcwMGM1Y2FkNzVkYzE0NTYzZDMyZWQwNWJiYTdjMEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
      class="button-link" target="_blank">Book Your Session on Google Calendar</a>
 
   <footer>
@@ -123,11 +124,10 @@
 </div>
 
 <script>
-  // PayPal Button Rendering
   const buttonIds = {
-    recorded: "BUTTON_ID_1",      // Replace with your actual Hosted Button ID
-    unrecorded: "BUTTON_ID_2",    // Replace with your actual Hosted Button ID
-    consultation: "BUTTON_ID_3"   // Replace with your actual Hosted Button ID
+    recorded: "YOUR_BUTTON_ID_1",
+    unrecorded: "YOUR_BUTTON_ID_2",
+    consultation: "YOUR_BUTTON_ID_3"
   };
 
   const containers = {
@@ -136,33 +136,25 @@
     consultation: "#paypal-button-consultation"
   };
 
-  document.getElementById("session").addEventListener("change", function () {
-    const selected = this.value;
-    const paypalContainer = document.getElementById("paypal-container");
-    paypalContainer.classList.remove("hidden");
+  function showPaymentOptions() {
+    const selected = document.getElementById("session").value;
+    if (!selected || !buttonIds[selected]) return;
 
-    // Hide all PayPal buttons first
+    document.getElementById("paypal-container").classList.remove("hidden");
+
+    // Hide all buttons
     Object.keys(containers).forEach(key => {
       document.querySelector(containers[key]).classList.add("hidden");
     });
 
-    if (buttonIds[selected]) {
-      document.querySelector(containers[selected]).classList.remove("hidden");
-    }
-  });
+    // Show selected PayPal button
+    document.querySelector(containers[selected]).classList.remove("hidden");
+  }
 
-  // Render PayPal Buttons
-  paypal.HostedButtons({
-    hostedButtonId: buttonIds.recorded,
-  }).render(containers.recorded);
-
-  paypal.HostedButtons({
-    hostedButtonId: buttonIds.unrecorded,
-  }).render(containers.unrecorded);
-
-  paypal.HostedButtons({
-    hostedButtonId: buttonIds.consultation,
-  }).render(containers.consultation);
+  // Render PayPal Hosted Buttons
+  paypal.HostedButtons({ hostedButtonId: buttonIds.recorded }).render(containers.recorded);
+  paypal.HostedButtons({ hostedButtonId: buttonIds.unrecorded }).render(containers.unrecorded);
+  paypal.HostedButtons({ hostedButtonId: buttonIds.consultation }).render(containers.consultation);
 </script>
 
 </body>
