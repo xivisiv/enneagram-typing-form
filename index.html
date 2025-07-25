@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enneagram Typing Tool</title>
+  <title>Enneagram Typing Interview</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -42,7 +40,11 @@
       display: flex;
     }
 
-    form input, form textarea, form button {
+    form input,
+    form select,
+    form textarea,
+    form label,
+    form button {
       width: 100%;
       margin-bottom: 1em;
       padding: 0.5em;
@@ -52,6 +54,11 @@
       border: 1px solid #444;
     }
 
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.5em;
+    }
+
     button {
       background: #444;
       border: none;
@@ -59,7 +66,6 @@
       color: white;
       cursor: pointer;
       font-size: 1em;
-      width: 100%;
     }
 
     h1, p {
@@ -68,6 +74,24 @@
 
     .paypal-container {
       margin: 1em 0;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1em;
+      font-size: 0.9em;
+    }
+
+    .checkbox-container label {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #ccc;
+    }
+
+    a {
+      color: #4ac;
     }
   </style>
 
@@ -80,50 +104,86 @@
 
 <div id="main-container">
   <div class="container">
-    <!-- Page 1: Typing Form -->
+    <!-- Step 1: Client Details -->
     <section class="page active" id="page-1">
-      <h1>Typing Request</h1>
+      <h1>Book Your Typing Interview</h1>
       <form id="typing-form">
-        <label for="name">Your Name</label>
+        <label for="name">Full Name</label>
         <input type="text" id="name" required>
 
-        <label for="email">Your Email</label>
+        <label for="nickname">Preferred Name (Optional)</label>
+        <input type="text" id="nickname">
+
+        <label for="email">Email Address</label>
         <input type="email" id="email" required>
+
+        <label for="platform">Preferred Platform</label>
+        <select id="platform" required>
+          <option value="">Select one</option>
+          <option>Zoom</option>
+          <option>Messenger</option>
+          <option>Google Meet</option>
+          <option>Other</option>
+        </select>
+
+        <label for="timezone">Your Time Zone</label>
+        <input type="text" id="timezone" placeholder="e.g., GMT+8 (Philippines)" required>
+
+        <label for="notes">Any Notes or Expectations? (Optional)</label>
+        <textarea id="notes" rows="3"></textarea>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="tos" required>
+          <label for="tos">I have read and agree to the <a href="#" target="_blank">Terms of Service</a>.</label>
+        </div>
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="research-consent">
+          <label for="research-consent">I would like to receive a research discount and allow anonymized data from my session to be used for educational or research purposes.</label>
+        </div>
 
         <button type="submit">Continue to Payment</button>
       </form>
     </section>
 
-    <!-- Page 2: PayPal Hosted Button -->
+    <!-- Step 2: PayPal Hosted Button -->
     <section class="page" id="page-2">
       <h1>Complete Your Payment</h1>
-      <p>Use the button below to pay with PayPal:</p>
-      
+      <p>Use the button below to pay via PayPal. You will then proceed to scheduling.</p>
+
       <div id="paypal-container-8K53V3MR3B4VG" class="paypal-container"></div>
 
       <button id="continue-after-payment">I Have Paid</button>
     </section>
 
-    <!-- Page 3: Booking -->
+    <!-- Step 3: Booking -->
     <section class="page" id="page-3">
-      <h1>Booking Link</h1>
-      <p>Thank you for your payment! Click below to schedule your session:</p>
-      <a href="https://calendly.com/hiddenenneagram" target="_blank" style="text-align:center;display:block;background:#0070ba;color:white;padding:0.75em;border-radius:4px;text-decoration:none;">
+      <h1>Schedule Your Interview</h1>
+      <p>Thank you for your payment! Click below to book your preferred session time:</p>
+      <a href="https://calendly.com/hiddenenneagram" target="_blank"
+         style="text-align:center;display:block;background:#0070ba;color:white;padding:0.75em;border-radius:4px;text-decoration:none;">
         Book Now
       </a>
       <br><br>
       <button id="continue-after-booking">Continue</button>
     </section>
 
-    <!-- Page 4: Thank You -->
+    <!-- Step 4: Thank You Page -->
     <section class="page" id="page-4">
       <h1>Thank You!</h1>
-      <p>Your request has been received. We will contact you at <strong>hiddenenneagram@gmail.com</strong>.</p>
+      <p>Your session request has been received.</p>
+      <p>You will be contacted shortly at <strong>hiddenenneagram@gmail.com</strong> with confirmation.</p>
+      <p>In the meantime, feel free to explore:</p>
+      <ul>
+        <li><a href="#">Beginner’s Enneagram Guide</a></li>
+        <li><a href="#">Tritype & Subtype Resources</a></li>
+        <li><a href="#">Join Our Community</a></li>
+      </ul>
     </section>
   </div>
 </div>
 
-<!-- ✅ Render the hosted PayPal button -->
+<!-- ✅ Script for Page Transitions + PayPal -->
 <script>
   const pages = document.querySelectorAll('.page');
 
@@ -133,18 +193,17 @@
 
   document.getElementById('typing-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    showPage(1); // Show payment page
+    showPage(1); // Go to payment
   });
 
   document.getElementById('continue-after-payment').addEventListener('click', function() {
-    showPage(2); // Show booking page
+    showPage(2); // Go to booking
   });
 
   document.getElementById('continue-after-booking').addEventListener('click', function() {
-    showPage(3); // Show thank you page
+    showPage(3); // Go to thank you
   });
 
-  // ✅ Render PayPal Hosted Button
   paypal.HostedButtons({
     hostedButtonId: "8K53V3MR3B4VG",
   }).render("#paypal-container-8K53V3MR3B4VG");
