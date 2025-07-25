@@ -3,187 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Enneagram Typing Interview</title>
+  <title>Enneagram Typing Tool</title>
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #000000;
+      background: #000;
       color: #eee;
       font-family: 'EB Garamond', serif;
-      font-size: 1.2em;
-      overflow: hidden;
+      font-size: 1.1em;
     }
 
     #main-container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
-      width: 100%;
+      min-height: 100vh;
+      padding: 2rem;
     }
 
     .container {
-      width: 90%;
+      width: 100%;
       max-width: 600px;
     }
 
     .page {
       display: none;
       flex-direction: column;
+      gap: 1rem;
     }
 
     .page.active {
       display: flex;
     }
 
-    form input,
-    form select,
-    form textarea,
-    form label,
-    form button {
-      width: 100%;
-      margin-bottom: 1em;
-      padding: 0.5em;
-      font-size: 1em;
-      background: #222;
-      color: #fff;
-      border: 1px solid #444;
+    h1 {
+      text-align: center;
+      font-size: 2em;
     }
 
-    input[type="checkbox"] {
-      width: auto;
-      margin-right: 0.5em;
+    p {
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    label {
+      margin-bottom: 0.3em;
+      display: block;
+      font-weight: bold;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      padding: 0.7em;
+      font-size: 1em;
+      border: 1px solid #444;
+      background: #111;
+      color: #fff;
+      border-radius: 5px;
     }
 
     button {
       background: #444;
       border: none;
-      padding: 0.75em 1.5em;
-      color: white;
       cursor: pointer;
-      font-size: 1em;
+      transition: background 0.2s;
     }
 
-    h1, p {
-      text-align: center;
+    button:hover {
+      background: #666;
     }
 
     .paypal-container {
       margin: 1em 0;
+      text-align: center;
     }
 
-    .checkbox-container {
-      display: flex;
-      align-items: flex-start;
+    a.button-link {
+      display: block;
+      background: #0070ba;
+      color: white;
+      padding: 0.7em;
+      border-radius: 5px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: bold;
       margin-bottom: 1em;
+    }
+
+    a.button-link:hover {
+      background: #005c99;
+    }
+
+    .tos-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    footer {
+      text-align: center;
       font-size: 0.9em;
+      margin-top: 1rem;
+      opacity: 0.7;
     }
 
-    .checkbox-container label {
-      background: none;
-      border: none;
-      padding: 0;
-      color: #ccc;
-    }
-
-    a {
-      color: #4ac;
+    @media (max-width: 600px) {
+      html {
+        font-size: 1em;
+      }
     }
   </style>
 
-  <!-- ✅ Load PayPal SDK -->
-  <script 
-    src="https://www.paypal.com/sdk/js?client-id=BAAJJ80CqGT3b65mquKpkXN5D6QDiEzBuFYAo01cGbU8jegpSf-uxaA0rGsozub3df2-HjosUBLIJLSf7M&components=hosted-buttons&enable-funding=venmo&currency=USD">
-  </script>
+  <!-- ✅ PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=BAAJJ80CqGT3b65mquKpkXN5D6QDiEzBuFYAo01cGbU8jegpSf-uxaA0rGsozub3df2-HjosUBLIJLSf7M&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
 </head>
 <body>
 
 <div id="main-container">
   <div class="container">
-    <!-- Step 1: Client Details -->
-    <section class="page active" id="page-1">
-      <h1>Book Your Typing Interview</h1>
+
+    <!-- Page 0: Terms of Service -->
+    <section class="page active" id="page-0">
+      <h1>Terms of Service</h1>
+      <p>Before proceeding, please review and accept our terms of service.</p>
+      <p>This typing session is for educational and self-reflective purposes only. We do not guarantee an accurate Enneagram type, nor are we providing psychological, therapeutic, or medical advice.</p>
+      <label class="tos-checkbox">
+        <input type="checkbox" id="accept-tos" />
+        I have read and agree to the Terms of Service
+      </label>
+      <button id="continue-after-tos">Continue</button>
+    </section>
+
+    <!-- Page 1: Typing Request Form -->
+    <section class="page" id="page-1">
+      <h1>Typing Request</h1>
       <form id="typing-form">
-        <label for="name">Full Name</label>
+        <label for="name">Your Name</label>
         <input type="text" id="name" required>
 
-        <label for="nickname">Preferred Name (Optional)</label>
-        <input type="text" id="nickname">
-
-        <label for="email">Email Address</label>
+        <label for="email">Your Email</label>
         <input type="email" id="email" required>
-
-        <label for="platform">Preferred Platform</label>
-        <select id="platform" required>
-          <option value="">Select one</option>
-          <option>Zoom</option>
-          <option>Messenger</option>
-          <option>Google Meet</option>
-          <option>Other</option>
-        </select>
-
-        <label for="timezone">Your Time Zone</label>
-        <input type="text" id="timezone" placeholder="e.g., GMT+8 (Philippines)" required>
-
-        <label for="notes">Any Notes or Expectations? (Optional)</label>
-        <textarea id="notes" rows="3"></textarea>
-
-        <div class="checkbox-container">
-          <input type="checkbox" id="tos" required>
-          <label for="tos">I have read and agree to the <a href="#" target="_blank">Terms of Service</a>.</label>
-        </div>
-
-        <div class="checkbox-container">
-          <input type="checkbox" id="research-consent">
-          <label for="research-consent">I would like to receive a research discount and allow anonymized data from my session to be used for educational or research purposes.</label>
-        </div>
 
         <button type="submit">Continue to Payment</button>
       </form>
     </section>
 
-    <!-- Step 2: PayPal Hosted Button -->
+    <!-- Page 2: PayPal Button -->
     <section class="page" id="page-2">
       <h1>Complete Your Payment</h1>
-      <p>Use the button below to pay via PayPal. You will then proceed to scheduling.</p>
-
+      <p>Pay $10 USD via PayPal to continue.</p>
       <div id="paypal-container-8K53V3MR3B4VG" class="paypal-container"></div>
-
       <button id="continue-after-payment">I Have Paid</button>
     </section>
 
-    <!-- Step 3: Booking -->
+    <!-- Page 3: Booking -->
     <section class="page" id="page-3">
-      <h1>Schedule Your Interview</h1>
-      <p>Thank you for your payment! Click below to book your preferred session time:</p>
-      <a href="https://calendly.com/hiddenenneagram" target="_blank"
-         style="text-align:center;display:block;background:#0070ba;color:white;padding:0.75em;border-radius:4px;text-decoration:none;">
-        Book Now
-      </a>
-      <br><br>
+      <h1>Schedule Your Session</h1>
+      <p>Thank you! Please book a time using the link below.</p>
+      <a href="https://calendly.com/hiddenenneagram" target="_blank" class="button-link">Book Now</a>
       <button id="continue-after-booking">Continue</button>
     </section>
 
-    <!-- Step 4: Thank You Page -->
+    <!-- Page 4: Final Confirmation -->
     <section class="page" id="page-4">
       <h1>Thank You!</h1>
-      <p>Your session request has been received.</p>
-      <p>You will be contacted shortly at <strong>hiddenenneagram@gmail.com</strong> with confirmation.</p>
-      <p>In the meantime, feel free to explore:</p>
-      <ul>
-        <li><a href="#">Beginner’s Enneagram Guide</a></li>
-        <li><a href="#">Tritype & Subtype Resources</a></li>
-        <li><a href="#">Join Our Community</a></li>
-      </ul>
+      <p>Your request has been received.</p>
+      <p>We will contact you at <strong>hiddenenneagram@gmail.com</strong> within 24–48 hours.</p>
     </section>
+
+    <footer>
+      &copy; 2025 The Hidden Enneagram | All rights reserved.
+    </footer>
   </div>
 </div>
 
-<!-- ✅ Script for Page Transitions + PayPal -->
 <script>
   const pages = document.querySelectorAll('.page');
 
@@ -191,19 +190,31 @@
     pages.forEach((p, i) => p.classList.toggle('active', i === index));
   }
 
+  // TOS Check
+  document.getElementById('continue-after-tos').addEventListener('click', () => {
+    const tosAccepted = document.getElementById('accept-tos').checked;
+    if (!tosAccepted) {
+      alert("Please agree to the Terms of Service to continue.");
+      return;
+    }
+    showPage(1);
+  });
+
+  // Form Submit
   document.getElementById('typing-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    showPage(1); // Go to payment
+    showPage(2);
   });
 
   document.getElementById('continue-after-payment').addEventListener('click', function() {
-    showPage(2); // Go to booking
+    showPage(3);
   });
 
   document.getElementById('continue-after-booking').addEventListener('click', function() {
-    showPage(3); // Go to thank you
+    showPage(4);
   });
 
+  // PayPal Hosted Button
   paypal.HostedButtons({
     hostedButtonId: "8K53V3MR3B4VG",
   }).render("#paypal-container-8K53V3MR3B4VG");
